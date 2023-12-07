@@ -1,14 +1,15 @@
 .footer {
   background-color: $grisOscuro;
-  padding: $separacion / 2 0;
+  padding: 2rem;
 
   .conteneder-footer {
-    padding-top: $separacion / 2;
+    padding-top: 2rem;
   }
 
   .copyright {
     color: $blanco;
     text-align: center;
-    margin-bottom: $separacion / 2;
+    margin-bottom: 2rem;
   }
 }
+
