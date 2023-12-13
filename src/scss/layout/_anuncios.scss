@@ -16,24 +16,21 @@
   p {
     margin: 0;
   }
-
-  
-  .precio {
-    color: $verde;
-    font-weight: $bold;
-    font-size: 3rem;
-  }
 }
 .anuncio:hover {
-    
-    border: solid 2px black;
-  }
+  border: solid 2px black;
+}
 
-
+.precio {
+  color: $verde;
+  font-weight: $bold;
+  font-size: 3rem;
+}
 .iconos-caracteristicas {
   display: flex;
   list-style: none;
   padding: 0;
+  max-width: 40rem;
 
   li {
     flex: 1;
