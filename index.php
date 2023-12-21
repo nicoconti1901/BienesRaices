@@ -1,7 +1,8 @@
 <?php
-$inicio = true;
-include 'includes/templates/header.php';
+require 'includes/funciones.php';
+incluirTemplate('header', $inicio = true);
 ?>
+
 <main class="contenedor seccion">
   <h1>Mas Sobre Nosotros</h1>
   <div class="iconos-nosotros">
@@ -203,5 +204,5 @@ include 'includes/templates/header.php';
   </section>
 </div>
 <?php
-include 'includes/templates/footer.php';
+incluirTemplate('footer')
 ?>
