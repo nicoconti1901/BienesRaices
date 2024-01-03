@@ -2,15 +2,14 @@
 //BASE DE DATOS
 require '../../includes/config/database.php';
 $conexion = conectarDB();
+//ARREGLO CON MENSAJES DE ERRORES
+$errores = [];
+//echo "<pre>";
+//var_dump($_SERVER ['REQUEST_METHOD']);
+//echo "</pre>";
 
-echo "<pre>";
-var_dump($_SERVER ['REQUEST_METHOD']);
-echo "</pre>";
-
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    echo "<pre>";
-    var_dump($_POST);
-    echo "</pre>";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
 
     $titulo = $_POST['titulo'];
     $precio = $_POST['precio'];
@@ -18,15 +17,40 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $habitaciones = $_POST['habitaciones'];
     $wc = $_POST['wc'];
     $estacionamiento = $_POST['estacionamiento'];
-    $vendedores_id = $_POST['vendedor'];
+    $vendedores_id = $_POST['vendedores_id'];
 
 
-//INSERTAR EN LA BASE DE DATOS
-$query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedores_id) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedores_id')";
+    if (!$titulo) {
+        $errores[] = "Debes añadir un titulo";
+    }
+    if (!$precio) {
+        $errores[] = "Debes añadir un precio";
+    }
+    if (!$descripcion) {
+        $errores[] = "Debes añadir una descripcion";
+    }
+    if (!$habitaciones) {
+        $errores[] = "Debes añadir un numero de habitaciones";
+    }
+    if (!$wc) {
+        $errores[] = "Debes añadir un numero de baños";
+    }
 
-// echo $query;
+    if (!$estacionamiento) {
+        $errores[] = "Debes añadir un numero de estacionamientos";
+    }
+    if (!$vendedores_id) {
+        $errores[] = "Debes añadir un vendedor";
+    }
 
-$resultado = mysqli_query($conexion, $query);
+    //REVISAR QUE EL ARRAY DE ERRORES ESTE VACIO
+    if (empty($errores)) {
+        //INSERTAR EN LA BASE DE DATOS
+        $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedores_id) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedores_id')";
+
+        $resultado = mysqli_query($conexion, $query);
+        
+    }
 }
 require '../../includes/funciones.php';
 incluirTemplate('header');
@@ -34,6 +58,12 @@ incluirTemplate('header');
 <main class="contenedor seccion">
     <h1>CREAR</h1>
     <a href="/admin" class="boton boton-verde">Volver</a>
+
+    <?php foreach ($errores as $error) : ?>
+        <div class="alerta error">
+            <?php echo $error; ?>
+        </div>
+    <?php endforeach; ?>
 
     <form class="formulario" method="POST" action="/admin/propiedades/crear.php">
         <fieldset>
@@ -67,7 +97,8 @@ incluirTemplate('header');
         <fieldset>
             <legend>Vendedor</legend>
 
-            <select name="vendedor">
+            <select name="vendedores_id">
+                <option value="0">--Seleccione--</option>
                 <option value="1">Vendedor 1</option>
                 <option value="2">Vendedor 2</option>
             </select>
