@@ -38,14 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $titulo = mysqli_real_escape_string($conexion, $_POST['titulo']);
     $precio = mysqli_real_escape_string($conexion,  $_POST['precio']);
-    $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']); 
-    $habitaciones = mysqli_real_escape_string($conexion, $_POST['habitaciones']); 
-    $wc = mysqli_real_escape_string($conexion, $_POST['wc']); 
+    $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+    $habitaciones = mysqli_real_escape_string($conexion, $_POST['habitaciones']);
+    $wc = mysqli_real_escape_string($conexion, $_POST['wc']);
     $estacionamiento = mysqli_real_escape_string($conexion, $_POST['estacionamiento']);
     $vendedores_id = mysqli_real_escape_string($conexion,  $_POST['vendedor']);
     $creado = date('Y/m/d');
 
-//ASIGNAR FILES HACIA UNA VARIABLE
+    //ASIGNAR FILES HACIA UNA VARIABLE
     $imagen = $_FILES['imagen'];
 
     if (!$titulo) {
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$vendedores_id) {
         $errores[] = "Debes añadir un vendedor";
     }
-    
+
     //VALIDAR POR TAMAÑO (1MB MAXIMO)
     $medida = 1000 * 1000;
     if ($imagen['size'] > $medida) {
@@ -79,19 +79,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //REVISAR QUE EL ARRAY DE ERRORES ESTE VACIO
     if (empty($errores)) {
-        //SUBIDA DE ARCHIVOS
         //CREAR CARPETA
         $carpetaImagenes = '../../imagenes/';
         if (!is_dir($carpetaImagenes)) {
             mkdir($carpetaImagenes);
         }
-        //SUBIR IMAGENES
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
-        //GENERAR UN NOMBRE UNICO
-        $nombreImagen = md5( uniqid( rand(), true) ) . ".jpg";
+
+        $nombreImagen = '';
+        //SUBIDA DE ARCHIVOS
+        if ($imagen['name']) {
+            //ELIMINAR IMAGEN
+            unlink($carpetaImagenes . $propiedad['imagen']);
+            //GENERAR UN NOMBRE UNICO
+            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+            //SUBIR IMAGENES
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
+        }else{
+            $nombreImagen = $propiedad['imagen'];
+        }
+
+
+
 
         //INSERTAR EN LA BASE DE DATOS
-        $query = "UPDATE propiedades SET titulo = '$titulo', precio = '$precio', descripcion = '$descripcion', habitaciones = '$habitaciones', wc = '$wc', estacionamiento = '$estacionamiento', vendedores_id = '$vendedores_id' WHERE id = $id";
+        $query = "UPDATE propiedades SET titulo = '$titulo', precio = '$precio', imagen ='$nombreImagen', descripcion = '$descripcion', habitaciones = '$habitaciones', wc = '$wc', estacionamiento = '$estacionamiento', vendedores_id = '$vendedores_id' WHERE id = $id";
 
         $resultado = mysqli_query($conexion, $query);
 
