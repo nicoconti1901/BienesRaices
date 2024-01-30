@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //SUBIR IMAGENES
         move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
         //GENERAR UN NOMBRE UNICO
-        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+        $nombreImagen = md5( uniqid( rand(), true) ) . ".jpg";
 
         //INSERTAR EN LA BASE DE DATOS
         $query = "INSERT INTO propiedades (titulo, precio,imagen, descripcion, habitaciones, wc, estacionamiento,creado, vendedores_id) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento','$creado', '$vendedores_id')";
